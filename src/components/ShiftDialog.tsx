@@ -15,6 +15,7 @@ interface ShiftDialogProps {
 
 export function ShiftDialog({
   open,
+  onOpenChange,
   selectedDate,
   currentShift,
   onSelectShift,
@@ -90,6 +91,7 @@ export function ShiftDialog({
                       <Button
                         onClick={() => {
                           onSelectShift(option.type)
+                          onOpenChange(false)
                         }}
                         className={`
                           w-full h-auto p-4 justify-start gap-3 md:flex-col md:items-center md:justify-center md:gap-2
@@ -114,6 +116,7 @@ export function ShiftDialog({
                   <Button
                     onClick={() => {
                       onDeleteShift()
+                      onOpenChange(false)
                     }}
                     variant="destructive"
                     className="w-full gap-2"
