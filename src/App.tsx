@@ -55,7 +55,7 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20 p-4 md:p-8">
+    <div className="min-h-screen h-full bg-gradient-to-br from-background via-background to-secondary/20 p-4 md:p-8 flex items-start md:items-center">
       <div 
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
@@ -76,7 +76,7 @@ function App() {
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto">
+      <div className="relative max-w-5xl mx-auto w-full">
         <div className="text-center mb-8">
           <h1 
             className="text-4xl md:text-5xl font-bold text-primary mb-2"

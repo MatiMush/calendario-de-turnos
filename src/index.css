@@ -66,6 +66,10 @@
   --shadow-spread: 0px;
   --shadow-offset-x: 2px;
   --shadow-offset-y: 6px;
+
+  --morning-shift: oklch(0.85 0.15 80);
+  --night-shift: oklch(0.35 0.12 270);
+  --rest-day: oklch(0.82 0.12 150);
 }
 
 @theme {
