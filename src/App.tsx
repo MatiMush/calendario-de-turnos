@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { useKV } from '@github/spark/hooks'
 import { Calendar } from '@/components/Calendar'
 import { ShiftDialog } from '@/components/ShiftDialog'
+import { ShiftSummary } from '@/components/ShiftSummary'
 import { ShiftType, ShiftData } from '@/types/shift'
 import { Toaster } from '@/components/ui/sonner'
 import { toast } from 'sonner'
+import { generateShiftPDF } from '@/lib/pdf-generator'
 
 function App() {
   const [shifts, setShifts] = useKV<ShiftData>('work-shifts', {})
@@ -56,6 +58,11 @@ function App() {
 
   const handleNextMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1))
+  }
+
+  const handleExportPDF = () => {
+    generateShiftPDF(shifts || {}, currentDate)
+    toast.success('PDF generado exitosamente')
   }
 
   return (
@@ -112,6 +119,12 @@ function App() {
           currentShift={selectedDate && shifts ? shifts[selectedDate] || null : null}
           onSelectShift={handleSelectShift}
           onDeleteShift={handleDeleteShift}
+        />
+
+        <ShiftSummary
+          shifts={shifts || {}}
+          currentDate={currentDate}
+          onExportPDF={handleExportPDF}
         />
 
         <Toaster position="bottom-center" />

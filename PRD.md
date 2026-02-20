@@ -40,6 +40,20 @@ This is a shift calendar with basic CRUD operations for managing work schedules.
 - Progression: Click arrow → Calendar transitions to adjacent month → Persisted shifts display correctly
 - Success criteria: Smooth navigation, data persists across all months
 
+**Shift Period Summary (20th to 20th)**
+- Functionality: Display a summary of shifts from the 20th of the current month to the 20th of the next month
+- Purpose: Matches the pay period structure (diagrama de tiras de hora) which runs from the 20th to the 20th
+- Trigger: Automatically updates based on current month view
+- Progression: View calendar → Summary card displays below → Shows count of morning shifts, night shifts, and rest days for the period
+- Success criteria: Accurate count of shifts within the 20-20 period, clear visual presentation
+
+**PDF Export**
+- Functionality: Generate and download a PDF report of the shift period (20th to 20th)
+- Purpose: Allows users to save and share their work schedule
+- Trigger: User clicks "Exportar PDF" button in the summary section
+- Progression: Click button → PDF generates with period summary and detailed shift list → File downloads automatically
+- Success criteria: PDF contains accurate data, readable formatting, downloads successfully
+
 ## Edge Case Handling
 
 - **Empty Calendar State**: First-time users see a clean calendar with a welcoming message explaining how to add their first shift
