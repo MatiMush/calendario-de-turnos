@@ -2,11 +2,11 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { CaretLeft, CaretRight, Sun, Moon, Leaf } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
-import { ShiftType } from '@/types/shift'
+import { ShiftType, ShiftData } from '@/types/shift'
 
 interface CalendarProps {
   currentDate: Date
-  shifts: { [key: string]: ShiftType }
+  shifts: ShiftData
   selectedDate: string | null
   onDateSelect: (date: string) => void
   onPreviousMonth: () => void
@@ -77,7 +77,7 @@ export function Calendar({ currentDate, shifts, selectedDate, onDateSelect, onPr
           aspect-square rounded-lg relative flex flex-col items-center justify-center
           transition-all duration-200 border-2
           ${shift 
-            ? `${getShiftColor(shift)} border-transparent shadow-md` 
+            ? `${getShiftColor(shift.type)} border-transparent shadow-md` 
             : 'bg-card hover:bg-secondary border-border hover:border-primary/30'
           }
           ${isToday ? 'ring-2 ring-accent ring-offset-2 ring-offset-background' : ''}
@@ -86,9 +86,12 @@ export function Calendar({ currentDate, shifts, selectedDate, onDateSelect, onPr
       >
         <span className={`text-sm font-medium ${shift ? 'mb-1' : ''}`}>{day}</span>
         {shift && (
-          <div className="flex items-center justify-center">
-            {getShiftIcon(shift)}
+          <div className="flex items-center justify-center gap-1">
+            {getShiftIcon(shift.type)}
           </div>
+        )}
+        {shift?.note && (
+          <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
         )}
       </motion.button>
     )

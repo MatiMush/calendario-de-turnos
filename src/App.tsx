@@ -23,12 +23,16 @@ function App() {
     setSelectedDate(null)
   }
 
-  const handleSelectShift = (type: ShiftType) => {
+  const handleSelectShift = (type: ShiftType, note?: string) => {
     if (!selectedDate) return
 
     setShifts((currentShifts) => ({
       ...currentShifts,
-      [selectedDate]: type,
+      [selectedDate]: {
+        date: selectedDate,
+        type,
+        note,
+      },
     }))
 
     const shiftNames = {

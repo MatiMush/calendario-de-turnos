@@ -1,15 +1,18 @@
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Sun, Moon, Leaf, Trash } from '@phosphor-icons/react'
-import { ShiftType } from '@/types/shift'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import { Sun, Moon, Leaf, Trash, NotePencil } from '@phosphor-icons/react'
+import { ShiftType, Shift } from '@/types/shift'
 import { motion, AnimatePresence } from 'framer-motion'
 
 interface ShiftDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   selectedDate: string | null
-  currentShift: ShiftType | null
-  onSelectShift: (type: ShiftType) => void
+  currentShift: Shift | null
+  onSelectShift: (type: ShiftType, note?: string) => void
   onDeleteShift: () => void
 }
 
@@ -21,6 +24,19 @@ export function ShiftDialog({
   onSelectShift,
   onDeleteShift,
 }: ShiftDialogProps) {
+  const [note, setNote] = useState('')
+  const [selectedType, setSelectedType] = useState<ShiftType | null>(null)
+
+  useEffect(() => {
+    if (currentShift) {
+      setNote(currentShift.note || '')
+      setSelectedType(currentShift.type)
+    } else {
+      setNote('')
+      setSelectedType(null)
+    }
+  }, [currentShift, open])
+
   const formatDate = (dateStr: string | null) => {
     if (!dateStr) return ''
     const date = new Date(dateStr + 'T12:00:00')
@@ -30,6 +46,13 @@ export function ShiftDialog({
       month: 'long',
       day: 'numeric',
     })
+  }
+
+  const handleSaveShift = () => {
+    if (selectedType) {
+      onSelectShift(selectedType, note.trim() || undefined)
+      onOpenChange(false)
+    }
   }
 
   const shiftOptions = [
@@ -77,10 +100,10 @@ export function ShiftDialog({
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
                 {shiftOptions.map((option) => {
                   const Icon = option.icon
-                  const isSelected = currentShift === option.type
+                  const isSelected = selectedType === option.type
 
                   return (
                     <motion.div
@@ -89,10 +112,7 @@ export function ShiftDialog({
                       whileTap={{ scale: 0.98 }}
                     >
                       <Button
-                        onClick={() => {
-                          onSelectShift(option.type)
-                          onOpenChange(false)
-                        }}
+                        onClick={() => setSelectedType(option.type)}
                         className={`
                           w-full h-auto p-4 justify-start gap-3 md:flex-col md:items-center md:justify-center md:gap-2
                           ${option.color}
@@ -111,21 +131,51 @@ export function ShiftDialog({
                 })}
               </div>
 
-              {currentShift && (
-                <div className="pt-4 mt-4 border-t">
+              <div className="space-y-3 pt-3 border-t">
+                <div className="flex items-center gap-2 text-primary">
+                  <NotePencil className="w-5 h-5" />
+                  <Label htmlFor="shift-note" className="text-base font-semibold">
+                    Nota o Comentario (opcional)
+                  </Label>
+                </div>
+                <Textarea
+                  id="shift-note"
+                  placeholder="Agrega una nota sobre este turno..."
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  className="min-h-[80px] resize-none"
+                  maxLength={200}
+                />
+                <p className="text-xs text-muted-foreground text-right">
+                  {note.length}/200 caracteres
+                </p>
+              </div>
+
+              <div className="flex flex-col md:flex-row gap-2 mt-4 pt-4 border-t">
+                <Button
+                  onClick={handleSaveShift}
+                  disabled={!selectedType}
+                  className="flex-1"
+                  size="lg"
+                >
+                  Guardar Turno
+                </Button>
+
+                {currentShift && (
                   <Button
                     onClick={() => {
                       onDeleteShift()
                       onOpenChange(false)
                     }}
                     variant="destructive"
-                    className="w-full gap-2"
+                    className="gap-2"
+                    size="lg"
                   >
                     <Trash className="w-4 h-4" />
-                    Eliminar Turno
+                    Eliminar
                   </Button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           </Card>
         </motion.div>

@@ -39,9 +39,9 @@ export function ShiftSummary({ shifts, currentDate, onExportPDF }: ShiftSummaryP
       const dateStr = currentDateIter.toISOString().split('T')[0]
       const shift = shifts[dateStr]
       
-      if (shift === 'morning') stats.morning++
-      else if (shift === 'night') stats.night++
-      else if (shift === 'rest') stats.rest++
+      if (shift?.type === 'morning') stats.morning++
+      else if (shift?.type === 'night') stats.night++
+      else if (shift?.type === 'rest') stats.rest++
       
       currentDateIter.setDate(currentDateIter.getDate() + 1)
     }

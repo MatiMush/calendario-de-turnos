@@ -39,7 +39,7 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
       rest: 0,
     }
     
-    const shiftList: Array<{ date: string; shift: ShiftType }> = []
+    const shiftList: Array<{ date: string; shift: ShiftType; note?: string }> = []
     
     const currentDateIter = new Date(startDate)
     
@@ -54,12 +54,13 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
             day: 'numeric',
             month: 'short',
           }),
-          shift,
+          shift: shift.type,
+          note: shift.note,
         })
         
-        if (shift === 'morning') stats.morning++
-        else if (shift === 'night') stats.night++
-        else if (shift === 'rest') stats.rest++
+        if (shift.type === 'morning') stats.morning++
+        else if (shift.type === 'night') stats.night++
+        else if (shift.type === 'rest') stats.rest++
       }
       
       currentDateIter.setDate(currentDateIter.getDate() + 1)
@@ -118,6 +119,16 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
       }
       
       pdf.text(shiftLabel, 70, yPos)
+      
+      if (item.note) {
+        pdf.setTextColor(100, 100, 100)
+        pdf.setFontSize(9)
+        yPos += 5
+        const noteLines = pdf.splitTextToSize(`Nota: ${item.note}`, 170)
+        pdf.text(noteLines, 25, yPos)
+        yPos += noteLines.length * 4
+        pdf.setFontSize(11)
+      }
       
       yPos += 7
     })
