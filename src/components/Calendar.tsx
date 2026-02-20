@@ -7,6 +7,7 @@ import { ShiftType } from '@/types/shift'
 interface CalendarProps {
   currentDate: Date
   shifts: { [key: string]: ShiftType }
+  selectedDate: string | null
   onDateSelect: (date: string) => void
   onPreviousMonth: () => void
   onNextMonth: () => void
@@ -18,7 +19,7 @@ const MONTHS = [
   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ]
 
-export function Calendar({ currentDate, shifts, onDateSelect, onPreviousMonth, onNextMonth }: CalendarProps) {
+export function Calendar({ currentDate, shifts, selectedDate, onDateSelect, onPreviousMonth, onNextMonth }: CalendarProps) {
   const year = currentDate.getFullYear()
   const month = currentDate.getMonth()
 
@@ -43,11 +44,11 @@ export function Calendar({ currentDate, shifts, onDateSelect, onPreviousMonth, o
   const getShiftColor = (type: ShiftType) => {
     switch (type) {
       case 'morning':
-        return 'bg-[var(--morning-shift)] text-foreground'
+        return 'bg-[var(--morning-shift)] text-foreground hover:bg-[var(--morning-shift)]/90'
       case 'night':
-        return 'bg-[var(--night-shift)] text-white'
+        return 'bg-[var(--night-shift)] text-[oklch(0.95_0.01_270)] hover:bg-[var(--night-shift)]/90'
       case 'rest':
-        return 'bg-[var(--rest-day)] text-foreground'
+        return 'bg-[var(--rest-day)] text-foreground hover:bg-[var(--rest-day)]/90'
     }
   }
 
@@ -61,13 +62,17 @@ export function Calendar({ currentDate, shifts, onDateSelect, onPreviousMonth, o
     const dateStr = formatDate(day)
     const shift = shifts[dateStr]
     const isToday = new Date().toDateString() === new Date(year, month, day).toDateString()
+    const isSelected = selectedDate === dateStr
 
     calendarDays.push(
       <motion.button
         key={day}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={() => onDateSelect(dateStr)}
+        onClick={(e) => {
+          e.stopPropagation()
+          onDateSelect(dateStr)
+        }}
         className={`
           aspect-square rounded-lg relative flex flex-col items-center justify-center
           transition-all duration-200 border-2
@@ -76,6 +81,7 @@ export function Calendar({ currentDate, shifts, onDateSelect, onPreviousMonth, o
             : 'bg-card hover:bg-secondary border-border hover:border-primary/30'
           }
           ${isToday ? 'ring-2 ring-accent ring-offset-2 ring-offset-background' : ''}
+          ${isSelected && !isToday ? 'ring-2 ring-primary ring-offset-2 ring-offset-background' : ''}
         `}
       >
         <span className={`text-sm font-medium ${shift ? 'mb-1' : ''}`}>{day}</span>

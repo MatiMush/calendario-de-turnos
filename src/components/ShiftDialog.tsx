@@ -44,21 +44,21 @@ export function ShiftDialog({
       label: 'Turno Mañana',
       time: '07:00 AM - 07:00 PM',
       icon: Sun,
-      color: 'bg-[var(--morning-shift)] hover:bg-[var(--morning-shift)]/80',
+      color: 'bg-[var(--morning-shift)] hover:bg-[var(--morning-shift)]/80 text-foreground',
     },
     {
       type: 'night' as ShiftType,
       label: 'Turno Noche',
       time: '07:00 PM - 07:00 AM',
       icon: Moon,
-      color: 'bg-[var(--night-shift)] hover:bg-[var(--night-shift)]/80',
+      color: 'bg-[var(--night-shift)] hover:bg-[var(--night-shift)]/80 text-[oklch(0.95_0.01_270)]',
     },
     {
       type: 'rest' as ShiftType,
       label: 'Día de Descanso',
       time: 'Sin trabajo',
       icon: Leaf,
-      color: 'bg-[var(--rest-day)] hover:bg-[var(--rest-day)]/80',
+      color: 'bg-[var(--rest-day)] hover:bg-[var(--rest-day)]/80 text-foreground',
     },
   ]
 
@@ -93,7 +93,6 @@ export function ShiftDialog({
                   className={`
                     w-full h-auto p-4 justify-start gap-4 
                     ${option.color}
-                    ${option.type === 'night' ? 'text-white' : 'text-foreground'}
                     ${isSelected ? 'ring-2 ring-accent ring-offset-2' : ''}
                   `}
                   variant="secondary"

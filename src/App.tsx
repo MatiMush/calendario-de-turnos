@@ -17,6 +17,10 @@ function App() {
     setDialogOpen(true)
   }
 
+  const handleClearSelection = () => {
+    setSelectedDate(null)
+  }
+
   const handleSelectShift = (type: ShiftType) => {
     if (!selectedDate) return
 
@@ -55,7 +59,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen h-full bg-gradient-to-br from-background via-background to-secondary/20 p-4 md:p-8 flex items-start md:items-center">
+    <div 
+      className="min-h-screen h-full bg-gradient-to-br from-background via-background to-secondary/20 p-4 md:p-8 flex items-start md:items-center"
+      onClick={handleClearSelection}
+    >
       <div 
         className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{
@@ -77,7 +84,7 @@ function App() {
       />
 
       <div className="relative max-w-5xl mx-auto w-full">
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 md:mb-8">
           <h1 
             className="text-4xl md:text-5xl font-bold text-primary mb-2"
             style={{ fontFamily: 'Bungee, sans-serif' }}
@@ -92,6 +99,7 @@ function App() {
         <Calendar
           currentDate={currentDate}
           shifts={shifts || {}}
+          selectedDate={selectedDate}
           onDateSelect={handleDateSelect}
           onPreviousMonth={handlePreviousMonth}
           onNextMonth={handleNextMonth}
