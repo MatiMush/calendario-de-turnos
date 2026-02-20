@@ -16,8 +16,9 @@ const MONTHS = [
 ]
 
 const HOURS_PER_SHIFT = {
-  morning: 8,
-  night: 9,
+  morning: 12,
+  night: 12,
+  nightHoursNocturnal: 9,
   rest: 0,
 }
 
@@ -35,6 +36,7 @@ export function ShiftSummary({ shifts, currentDate, onExportPDF }: ShiftSummaryP
       rest: 0,
       morningHours: 0,
       nightHours: 0,
+      nightHoursNocturnal: 0,
       totalHours: 0,
       startMonth: MONTHS[startDate.getMonth()],
       endMonth: MONTHS[endDate.getMonth()],
@@ -54,6 +56,7 @@ export function ShiftSummary({ shifts, currentDate, onExportPDF }: ShiftSummaryP
       } else if (shift?.type === 'night') {
         stats.night++
         stats.nightHours += HOURS_PER_SHIFT.night
+        stats.nightHoursNocturnal += HOURS_PER_SHIFT.nightHoursNocturnal
       } else if (shift?.type === 'rest') {
         stats.rest++
       }
@@ -193,7 +196,7 @@ export function ShiftSummary({ shifts, currentDate, onExportPDF }: ShiftSummaryP
               Desglose de Horas
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Turnos Mañana:</span>
               <span className="font-semibold text-foreground">{stats.morningHours}h ({HOURS_PER_SHIFT.morning}h/turno)</span>
@@ -201,6 +204,10 @@ export function ShiftSummary({ shifts, currentDate, onExportPDF }: ShiftSummaryP
             <div className="flex justify-between">
               <span className="text-muted-foreground">Turnos Noche:</span>
               <span className="font-semibold text-foreground">{stats.nightHours}h ({HOURS_PER_SHIFT.night}h/turno)</span>
+            </div>
+            <div className="flex justify-between md:col-span-2">
+              <span className="text-muted-foreground">Horas Nocturnas:</span>
+              <span className="font-semibold text-foreground">{stats.nightHoursNocturnal}h ({HOURS_PER_SHIFT.nightHoursNocturnal}h/turno de noche)</span>
             </div>
           </div>
         </div>

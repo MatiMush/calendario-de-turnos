@@ -7,8 +7,9 @@ const MONTHS = [
 ]
 
 const HOURS_PER_SHIFT = {
-  morning: 8,
-  night: 9,
+  morning: 12,
+  night: 12,
+  nightHoursNocturnal: 9,
   rest: 0,
 }
 
