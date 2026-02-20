@@ -54,6 +54,13 @@ This is a shift calendar with basic CRUD operations for managing work schedules.
 - Progression: Click button → PDF generates with period summary and detailed shift list → File downloads automatically
 - Success criteria: PDF contains accurate data, readable formatting, downloads successfully
 
+**Period Comparison**
+- Functionality: Compare work hours and shift patterns between different periods (20th to 20th)
+- Purpose: Allows users to analyze work trends, identify patterns in their schedule, and track changes over time
+- Trigger: User clicks "Comparar Períodos" button which opens a comparison dialog
+- Progression: Click button → Dialog opens → Select multiple periods from dropdown → View side-by-side comparison with visual charts → See differences in hours worked, shift distribution, and trends
+- Success criteria: Accurate calculations across periods, clear visual representation with charts, easy period selection
+
 ## Edge Case Handling
 
 - **Empty Calendar State**: First-time users see a clean calendar with a welcoming message explaining how to add their first shift

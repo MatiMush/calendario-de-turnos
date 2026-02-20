@@ -3,6 +3,7 @@ import { useKV } from '@github/spark/hooks'
 import { Calendar } from '@/components/Calendar'
 import { ShiftDialog } from '@/components/ShiftDialog'
 import { ShiftSummary } from '@/components/ShiftSummary'
+import { PeriodComparison } from '@/components/PeriodComparison'
 import { ShiftType, ShiftData } from '@/types/shift'
 import { Toaster } from '@/components/ui/sonner'
 import { toast } from 'sonner'
@@ -129,6 +130,13 @@ function App() {
           onSelectShift={handleSelectShift}
           onDeleteShift={handleDeleteShift}
         />
+
+        <div className="flex flex-col sm:flex-row gap-3 items-center justify-center mt-6 mb-4">
+          <PeriodComparison
+            shifts={shifts || {}}
+            currentDate={currentDate}
+          />
+        </div>
 
         <ShiftSummary
           shifts={shifts || {}}
