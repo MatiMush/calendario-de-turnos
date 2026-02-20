@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Sun, Moon, Leaf, Trash, NotePencil } from '@phosphor-icons/react'
+import { Sun, Moon, Leaf, Trash, NotePencil, FloppyDisk, Check } from '@phosphor-icons/react'
 import { ShiftType, Shift } from '@/types/shift'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -152,28 +152,63 @@ export function ShiftDialog({
               </div>
 
               <div className="flex flex-col md:flex-row gap-2 mt-4 pt-4 border-t">
-                <Button
-                  onClick={handleSaveShift}
-                  disabled={!selectedType}
+                <motion.div
                   className="flex-1"
-                  size="lg"
+                  whileHover={selectedType ? { scale: 1.02 } : {}}
+                  whileTap={selectedType ? { scale: 0.97 } : {}}
                 >
-                  Guardar Turno
-                </Button>
-
-                {currentShift && (
                   <Button
-                    onClick={() => {
-                      onDeleteShift()
-                      onOpenChange(false)
-                    }}
-                    variant="destructive"
-                    className="gap-2"
+                    onClick={handleSaveShift}
+                    disabled={!selectedType}
+                    className="w-full relative overflow-hidden bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 shadow-lg hover:shadow-xl hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed"
                     size="lg"
                   >
-                    <Trash className="w-4 h-4" />
-                    Eliminar
+                    <span className="relative z-10 flex items-center justify-center gap-2 font-semibold text-base">
+                      {selectedType ? (
+                        <>
+                          <Check weight="bold" className="w-5 h-5" />
+                          Guardar Turno
+                        </>
+                      ) : (
+                        <>
+                          <FloppyDisk weight="fill" className="w-5 h-5" />
+                          Selecciona un turno
+                        </>
+                      )}
+                    </span>
+                    {selectedType && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                        initial={{ x: '-100%' }}
+                        animate={{ x: '100%' }}
+                        transition={{
+                          repeat: Infinity,
+                          duration: 2,
+                          ease: 'linear',
+                        }}
+                      />
+                    )}
                   </Button>
+                </motion.div>
+
+                {currentShift && (
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    <Button
+                      onClick={() => {
+                        onDeleteShift()
+                        onOpenChange(false)
+                      }}
+                      variant="destructive"
+                      className="gap-2 shadow-md hover:shadow-lg hover:shadow-destructive/30 transition-all duration-300"
+                      size="lg"
+                    >
+                      <Trash className="w-4 h-4" />
+                      Eliminar
+                    </Button>
+                  </motion.div>
                 )}
               </div>
             </div>
