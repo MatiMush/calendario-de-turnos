@@ -6,6 +6,12 @@ const MONTHS = [
   'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ]
 
+const HOURS_PER_SHIFT = {
+  morning: 8,
+  night: 9,
+  rest: 0,
+}
+
 export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
   try {
     const pdf = new jsPDF({
@@ -37,6 +43,9 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
       morning: 0,
       night: 0,
       rest: 0,
+      morningHours: 0,
+      nightHours: 0,
+      totalHours: 0,
     }
     
     const shiftList: Array<{ date: string; shift: ShiftType; note?: string }> = []
@@ -58,13 +67,21 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
           note: shift.note,
         })
         
-        if (shift.type === 'morning') stats.morning++
-        else if (shift.type === 'night') stats.night++
-        else if (shift.type === 'rest') stats.rest++
+        if (shift.type === 'morning') {
+          stats.morning++
+          stats.morningHours += HOURS_PER_SHIFT.morning
+        } else if (shift.type === 'night') {
+          stats.night++
+          stats.nightHours += HOURS_PER_SHIFT.night
+        } else if (shift.type === 'rest') {
+          stats.rest++
+        }
       }
       
       currentDateIter.setDate(currentDateIter.getDate() + 1)
     }
+    
+    stats.totalHours = stats.morningHours + stats.nightHours
     
     pdf.setFontSize(12)
     pdf.setTextColor(60, 60, 60)
@@ -85,6 +102,22 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
     pdf.text(`Días de Descanso: ${stats.rest}`, 20, yPos)
     yPos += 8
     pdf.text(`Total: ${stats.morning + stats.night + stats.rest} días`, 20, yPos)
+    yPos += 12
+    
+    pdf.setFontSize(14)
+    pdf.setTextColor(40, 40, 40)
+    pdf.text('Estadísticas de Horas', 20, yPos)
+    yPos += 10
+    
+    pdf.setFontSize(12)
+    pdf.setTextColor(60, 60, 60)
+    pdf.text(`Horas Turno Mañana: ${stats.morningHours}h (${HOURS_PER_SHIFT.morning}h por turno)`, 20, yPos)
+    yPos += 8
+    pdf.text(`Horas Turno Noche: ${stats.nightHours}h (${HOURS_PER_SHIFT.night}h por turno)`, 20, yPos)
+    yPos += 8
+    pdf.setFontSize(13)
+    pdf.setTextColor(40, 40, 40)
+    pdf.text(`Total Horas Trabajadas: ${stats.totalHours}h`, 20, yPos)
     yPos += 15
     
     pdf.setFontSize(16)
