@@ -60,7 +60,7 @@ function App() {
 
   return (
     <div 
-      className="min-h-screen h-full bg-gradient-to-br from-background via-background to-secondary/20 p-4 md:p-8 flex items-start md:items-center"
+      className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20 p-4 md:p-8 flex flex-col items-center justify-center"
       onClick={handleClearSelection}
     >
       <div 
