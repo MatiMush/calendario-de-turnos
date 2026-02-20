@@ -61,8 +61,13 @@ function App() {
   }
 
   const handleExportPDF = () => {
-    generateShiftPDF(shifts || {}, currentDate)
-    toast.success('PDF generado exitosamente')
+    try {
+      generateShiftPDF(shifts || {}, currentDate)
+      toast.success('PDF generado exitosamente')
+    } catch (error) {
+      console.error('Error al exportar PDF:', error)
+      toast.error('Error al generar el PDF. Por favor, intenta de nuevo.')
+    }
   }
 
   return (
