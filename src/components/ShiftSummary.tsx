@@ -102,54 +102,58 @@ export function ShiftSummary({ shifts, currentDate, onExportPDF }: ShiftSummaryP
   ]
 
   return (
-    <Card className="w-full max-w-4xl mx-auto shadow-xl overflow-hidden bg-card/80 backdrop-blur-sm border-2 border-border mt-6">
-      <div className="bg-primary/10 border-b-2 border-border p-4 md:p-6">
+    <Card className="w-full shadow-xl overflow-hidden bg-card/80 backdrop-blur-sm border-2 border-border">
+      <div className="bg-primary/10 border-b-2 border-border p-4 md:p-5">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-primary" style={{ fontFamily: 'Bungee, sans-serif' }}>
+            <h3 className="text-lg md:text-xl font-bold text-primary" style={{ fontFamily: 'Bungee, sans-serif' }}>
               Resumen del Período
-            </h2>
-            <p className="text-sm md:text-base text-muted-foreground mt-1">
+            </h3>
+            <p className="text-xs md:text-sm text-muted-foreground mt-1">
               Del 20 de {stats.startMonth} al 20 de {stats.endMonth}
             </p>
           </div>
           
           <Button
             onClick={onExportPDF}
+            size="sm"
             className="gap-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground shadow-md"
           >
-            <FilePdf weight="fill" className="w-5 h-5" />
-            Exportar PDF
+            <FilePdf weight="fill" className="w-4 h-4" />
+            <span className="hidden sm:inline">Exportar PDF</span>
+            <span className="sm:hidden">PDF</span>
           </Button>
         </div>
       </div>
 
-      <div className="p-4 md:p-6 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="p-4 md:p-5 space-y-4">
+        <div className="grid grid-cols-1 gap-3">
           {shiftItems.map((item) => {
             const Icon = item.icon
             return (
               <motion.div
                 key={item.type}
                 whileHover={{ scale: 1.02 }}
-                className={`${item.bgColor} rounded-lg p-4 border-2 border-border`}
+                className={`${item.bgColor} rounded-lg p-3 border-2 border-border`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`${item.color} p-3 rounded-lg bg-background/50`}>
-                    <Icon weight="fill" className="w-7 h-7" />
+                  <div className={`${item.color} p-2 rounded-lg bg-background/50`}>
+                    <Icon weight="fill" className="w-6 h-6" />
                   </div>
-                  <div>
-                    <p className="text-2xl md:text-3xl font-bold text-foreground">
-                      {item.count}
-                    </p>
+                  <div className="flex-1">
+                    <div className="flex items-baseline justify-between">
+                      <p className="text-xl md:text-2xl font-bold text-foreground">
+                        {item.count}
+                      </p>
+                      {item.hours > 0 && (
+                        <p className="text-xs text-muted-foreground">
+                          {item.hours}h
+                        </p>
+                      )}
+                    </div>
                     <p className="text-xs md:text-sm text-muted-foreground font-medium">
                       {item.label}
                     </p>
-                    {item.hours > 0 && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {item.hours} horas
-                      </p>
-                    )}
                   </div>
                 </div>
               </motion.div>
@@ -157,57 +161,44 @@ export function ShiftSummary({ shifts, currentDate, onExportPDF }: ShiftSummaryP
           })}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="p-5 bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg border-2 border-primary/30"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-primary/20">
-                <Clock weight="fill" className="w-8 h-8 text-primary" />
-              </div>
-              <div>
-                <p className="text-3xl md:text-4xl font-bold text-foreground">
-                  {stats.totalHours}
-                </p>
-                <p className="text-sm text-muted-foreground font-medium">
-                  Total de Horas Trabajadas
-                </p>
-              </div>
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          className="p-4 bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg border-2 border-primary/30"
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-primary/20">
+              <Clock weight="fill" className="w-7 h-7 text-primary" />
             </div>
-          </motion.div>
-
-          <div className="p-5 bg-secondary/30 rounded-lg border-2 border-border flex items-center justify-center">
-            <div className="text-center">
-              <p className="text-sm text-muted-foreground mb-1">
-                Total de días en el período
+            <div className="flex-1">
+              <p className="text-3xl font-bold text-foreground">
+                {stats.totalHours}h
               </p>
-              <p className="text-3xl md:text-4xl font-bold text-foreground">
-                {stats.morning + stats.night + stats.rest}
+              <p className="text-sm text-muted-foreground font-medium">
+                Total de Horas Trabajadas
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="p-4 bg-accent/10 rounded-lg border border-accent/30">
+        <div className="p-3 bg-accent/10 rounded-lg border border-accent/30">
           <div className="flex items-center gap-2 mb-2">
             <Clock weight="bold" className="w-4 h-4 text-accent-foreground" />
             <p className="text-sm font-semibold text-accent-foreground">
               Desglose de Horas
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+          <div className="space-y-2 text-xs">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Turnos Mañana:</span>
-              <span className="font-semibold text-foreground">{stats.morningHours}h ({HOURS_PER_SHIFT.morning}h/turno)</span>
+              <span className="font-semibold text-foreground">{stats.morningHours}h</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Turnos Noche:</span>
-              <span className="font-semibold text-foreground">{stats.nightHours}h ({HOURS_PER_SHIFT.night}h/turno)</span>
+              <span className="font-semibold text-foreground">{stats.nightHours}h</span>
             </div>
-            <div className="flex justify-between md:col-span-2">
+            <div className="flex justify-between">
               <span className="text-muted-foreground">Horas Nocturnas:</span>
-              <span className="font-semibold text-foreground">{stats.nightHoursNocturnal}h ({HOURS_PER_SHIFT.nightHoursNocturnal}h/turno de noche)</span>
+              <span className="font-semibold text-foreground">{stats.nightHoursNocturnal}h</span>
             </div>
           </div>
         </div>

@@ -77,7 +77,7 @@ function App() {
 
   return (
     <div 
-      className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20 p-4 md:p-8 flex flex-col items-center justify-center"
+      className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20"
       onClick={handleClearSelection}
     >
       <div 
@@ -100,27 +100,60 @@ function App() {
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto w-full">
-        <div className="text-center mb-6 md:mb-8">
-          <h1 
-            className="text-4xl md:text-5xl font-bold text-primary mb-2"
-            style={{ fontFamily: 'Bungee, sans-serif' }}
-          >
-            Mi Calendario de Turnos
-          </h1>
-          <p className="text-muted-foreground text-lg">
-            Organiza tus días de trabajo y descanso
-          </p>
+      <div className="relative min-h-screen flex flex-col lg:flex-row">
+        <div className="lg:w-1/2 p-4 md:p-8 flex flex-col justify-center">
+          <div className="max-w-2xl mx-auto w-full">
+            <div className="text-center mb-6 md:mb-8">
+              <h1 
+                className="text-4xl md:text-5xl font-bold text-primary mb-2"
+                style={{ fontFamily: 'Bungee, sans-serif' }}
+              >
+                Mi Calendario
+              </h1>
+              <p className="text-muted-foreground text-lg">
+                Organiza tus turnos de trabajo
+              </p>
+            </div>
+
+            <Calendar
+              currentDate={currentDate}
+              shifts={shifts || {}}
+              selectedDate={selectedDate}
+              onDateSelect={handleDateSelect}
+              onPreviousMonth={handlePreviousMonth}
+              onNextMonth={handleNextMonth}
+            />
+          </div>
         </div>
 
-        <Calendar
-          currentDate={currentDate}
-          shifts={shifts || {}}
-          selectedDate={selectedDate}
-          onDateSelect={handleDateSelect}
-          onPreviousMonth={handlePreviousMonth}
-          onNextMonth={handleNextMonth}
-        />
+        <div className="lg:w-1/2 p-4 md:p-8 bg-secondary/10 border-t lg:border-t-0 lg:border-l-4 border-primary/20 flex flex-col justify-center">
+          <div className="max-w-2xl mx-auto w-full space-y-6">
+            <div className="text-center lg:text-left">
+              <h2 
+                className="text-3xl md:text-4xl font-bold text-primary mb-2"
+                style={{ fontFamily: 'Bungee, sans-serif' }}
+              >
+                Estadísticas
+              </h2>
+              <p className="text-muted-foreground text-base">
+                Resumen y comparativa de períodos
+              </p>
+            </div>
+
+            <div className="flex justify-center lg:justify-start">
+              <PeriodComparison
+                shifts={shifts || {}}
+                currentDate={currentDate}
+              />
+            </div>
+
+            <ShiftSummary
+              shifts={shifts || {}}
+              currentDate={currentDate}
+              onExportPDF={handleExportPDF}
+            />
+          </div>
+        </div>
 
         <ShiftDialog
           open={dialogOpen}
@@ -129,19 +162,6 @@ function App() {
           currentShift={selectedDate && shifts ? shifts[selectedDate] || null : null}
           onSelectShift={handleSelectShift}
           onDeleteShift={handleDeleteShift}
-        />
-
-        <div className="flex flex-col sm:flex-row gap-3 items-center justify-center mt-6 mb-4">
-          <PeriodComparison
-            shifts={shifts || {}}
-            currentDate={currentDate}
-          />
-        </div>
-
-        <ShiftSummary
-          shifts={shifts || {}}
-          currentDate={currentDate}
-          onExportPDF={handleExportPDF}
         />
 
         <Toaster position="bottom-center" />
