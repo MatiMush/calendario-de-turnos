@@ -40,6 +40,13 @@ This is a shift calendar with basic CRUD operations for managing work schedules.
 - Progression: Click arrow → Calendar transitions to adjacent month → Persisted shifts display correctly
 - Success criteria: Smooth navigation, data persists across all months
 
+**View Navigation (Calendar ↔ Statistics)**
+- Functionality: Toggle between full-screen calendar view and full-screen statistics view
+- Purpose: Provides focused, distraction-free experience for each primary function
+- Trigger: User clicks "Ver Estadísticas" button on calendar view or "Volver al Calendario" button on statistics view
+- Progression: Click button → View transitions to full-screen alternative view → Context preserved (current month, selected shifts)
+- Success criteria: Smooth transitions, all data persists between views, clear navigation buttons
+
 **Shift Period Summary (20th to 20th)**
 - Functionality: Display a summary of shifts from the 20th of the current month to the 20th of the next month
 - Purpose: Matches the pay period structure (diagrama de tiras de hora) which runs from the 20th to the 20th
@@ -139,3 +146,15 @@ Animations should feel organic and gentle, like pages turning in a book or leave
   - Touch targets minimum 44px for easy tapping
   - Month navigation buttons remain large and accessible
   - Font sizes remain consistent (already optimized for mobile)
+
+## Layout Architecture
+
+**Single-View Navigation**: The application uses a full-screen, single-view architecture where users navigate between two primary screens:
+1. **Calendar View** - Full-screen calendar interface with navigation button to statistics
+2. **Statistics View** - Full-screen statistics and comparison interface with navigation button back to calendar
+
+This approach provides:
+- Maximum focus on the current task
+- Cleaner mobile experience
+- Better utilization of screen space
+- Clear mental model of two distinct functional areas
