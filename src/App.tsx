@@ -88,33 +88,42 @@ function App() {
       onClick={handleClearSelection}
     >
       <div 
-        className="fixed inset-0 opacity-[0.025] pointer-events-none"
+        className="fixed inset-0 pointer-events-none"
         style={{
-          backgroundImage: `
-            radial-gradient(circle at 20% 50%, oklch(0.72 0.18 320) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, oklch(0.45 0.26 285) 0%, transparent 50%),
-            radial-gradient(circle at 40% 20%, oklch(0.68 0.24 35) 0%, transparent 50%)
+          background: `
+            radial-gradient(circle at 15% 25%, oklch(0.72 0.18 320 / 0.12) 0%, transparent 40%),
+            radial-gradient(circle at 85% 15%, oklch(0.45 0.26 285 / 0.15) 0%, transparent 45%),
+            radial-gradient(circle at 50% 80%, oklch(0.68 0.24 35 / 0.08) 0%, transparent 40%),
+            radial-gradient(circle at 90% 85%, oklch(0.72 0.18 320 / 0.1) 0%, transparent 35%)
           `,
         }}
       />
 
       <div 
-        className="fixed inset-0 opacity-[0.02] pointer-events-none"
+        className="fixed inset-0 opacity-[0.03] pointer-events-none"
         style={{
           backgroundImage: `repeating-linear-gradient(
-            0deg,
+            45deg,
             transparent,
-            transparent 40px,
-            currentColor 40px,
-            currentColor 41px
+            transparent 60px,
+            oklch(0.45 0.26 285 / 0.4) 60px,
+            oklch(0.45 0.26 285 / 0.4) 61px
           ),
           repeating-linear-gradient(
-            90deg,
+            -45deg,
             transparent,
-            transparent 40px,
-            currentColor 40px,
-            currentColor 41px
+            transparent 60px,
+            oklch(0.72 0.18 320 / 0.4) 60px,
+            oklch(0.72 0.18 320 / 0.4) 61px
           )`,
+        }}
+      />
+
+      <div 
+        className="fixed inset-0 opacity-[0.4] pointer-events-none"
+        style={{
+          backgroundImage: `radial-gradient(circle, oklch(0.45 0.26 285 / 0.08) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
         }}
       />
 
