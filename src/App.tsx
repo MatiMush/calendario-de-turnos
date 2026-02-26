@@ -184,9 +184,9 @@ function App() {
                         setCurrentView('stats')
                       }}
                       size="lg"
-                      className="gap-3 text-base font-semibold px-10 py-7 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_20px_50px_rgba(108,66,220,0.35)] transition-all duration-500 bg-gradient-to-br from-[oklch(0.55_0.28_285)] via-[oklch(0.60_0.22_300)] to-[oklch(0.48_0.30_270)] hover:from-[oklch(0.60_0.30_285)] hover:via-[oklch(0.65_0.24_300)] hover:to-[oklch(0.53_0.32_270)] text-white border-0 relative overflow-hidden group"
+                      className="gap-3 text-base font-semibold px-10 py-7 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_20px_50px_rgba(108,66,220,0.35)] transition-all duration-500 bg-white hover:bg-gray-50 text-primary border-2 border-primary relative overflow-hidden group"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                       <ChartBar size={26} weight="duotone" className="relative z-10" />
                       <span className="relative z-10">Ver Estadísticas</span>
                     </Button>
