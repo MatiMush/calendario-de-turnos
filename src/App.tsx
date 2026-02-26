@@ -162,17 +162,24 @@ function App() {
                 transition={{ duration: 0.4, delay: 0.3 }}
                 className="flex justify-center mt-10"
               >
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setCurrentView('stats')
-                  }}
-                  size="lg"
-                  className="gap-2 text-base px-8 py-6 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary"
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
                 >
-                  <ChartBar size={24} weight="duotone" />
-                  Ver Estadísticas
-                </Button>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setCurrentView('stats')
+                    }}
+                    size="lg"
+                    className="gap-3 text-base font-semibold px-10 py-7 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_20px_50px_rgba(108,66,220,0.35)] transition-all duration-500 bg-gradient-to-br from-[oklch(0.55_0.28_285)] via-[oklch(0.60_0.22_300)] to-[oklch(0.48_0.30_270)] hover:from-[oklch(0.60_0.30_285)] hover:via-[oklch(0.65_0.24_300)] hover:to-[oklch(0.53_0.32_270)] text-white border-0 relative overflow-hidden group"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                    <ChartBar size={26} weight="duotone" className="relative z-10" />
+                    <span className="relative z-10">Ver Estadísticas</span>
+                  </Button>
+                </motion.div>
               </motion.div>
             </div>
           </div>
