@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 import { generateShiftPDF } from '@/lib/pdf-generator'
 import { Button } from '@/components/ui/button'
 import { ChartBar, CalendarBlank } from '@phosphor-icons/react'
+import { motion } from 'framer-motion'
 
 type View = 'calendar' | 'stats'
 
@@ -82,25 +83,36 @@ function App() {
 
   return (
     <div 
-      className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/20"
+      className="min-h-screen bg-background relative overflow-hidden"
       onClick={handleClearSelection}
     >
       <div 
-        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        className="fixed inset-0 opacity-[0.025] pointer-events-none"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 20% 50%, oklch(0.72 0.18 320) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, oklch(0.45 0.26 285) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, oklch(0.68 0.24 35) 0%, transparent 50%)
+          `,
+        }}
+      />
+
+      <div 
+        className="fixed inset-0 opacity-[0.02] pointer-events-none"
         style={{
           backgroundImage: `repeating-linear-gradient(
             0deg,
             transparent,
-            transparent 2px,
-            currentColor 2px,
-            currentColor 4px
+            transparent 40px,
+            currentColor 40px,
+            currentColor 41px
           ),
           repeating-linear-gradient(
             90deg,
             transparent,
-            transparent 2px,
-            currentColor 2px,
-            currentColor 4px
+            transparent 40px,
+            currentColor 40px,
+            currentColor 41px
           )`,
         }}
       />
@@ -108,87 +120,130 @@ function App() {
       <div className="relative min-h-screen flex flex-col">
         {currentView === 'calendar' && (
           <div className="flex-1 p-4 md:p-8 flex flex-col justify-center">
-            <div className="max-w-2xl mx-auto w-full">
-              <div className="text-center mb-6 md:mb-8">
-                <h1 
-                  className="text-4xl md:text-5xl font-bold text-primary mb-2"
-                  style={{ fontFamily: 'Bungee, sans-serif' }}
+            <div className="max-w-3xl mx-auto w-full">
+              <div className="text-center mb-8 md:mb-12">
+                <motion.h1 
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-5xl md:text-7xl font-bold text-primary mb-3 tracking-tight"
+                  style={{ fontFamily: 'Playfair Display, serif' }}
                 >
                   Mi Calendario
-                </h1>
-                <p className="text-muted-foreground text-lg">
+                </motion.h1>
+                <motion.p 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="text-muted-foreground text-lg md:text-xl font-medium tracking-wide"
+                >
                   Organiza tus turnos de trabajo
-                </p>
+                </motion.p>
               </div>
 
-              <Calendar
-                currentDate={currentDate}
-                shifts={shifts || {}}
-                selectedDate={selectedDate}
-                onDateSelect={handleDateSelect}
-                onPreviousMonth={handlePreviousMonth}
-                onNextMonth={handleNextMonth}
-              />
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+              >
+                <Calendar
+                  currentDate={currentDate}
+                  shifts={shifts || {}}
+                  selectedDate={selectedDate}
+                  onDateSelect={handleDateSelect}
+                  onPreviousMonth={handlePreviousMonth}
+                  onNextMonth={handleNextMonth}
+                />
+              </motion.div>
 
-              <div className="flex justify-center mt-8">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                className="flex justify-center mt-10"
+              >
                 <Button
                   onClick={(e) => {
                     e.stopPropagation()
                     setCurrentView('stats')
                   }}
                   size="lg"
-                  className="gap-2"
+                  className="gap-2 text-base px-8 py-6 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-r from-primary to-secondary hover:from-secondary hover:to-primary"
                 >
-                  <ChartBar size={20} weight="duotone" />
+                  <ChartBar size={24} weight="duotone" />
                   Ver Estadísticas
                 </Button>
-              </div>
+              </motion.div>
             </div>
           </div>
         )}
 
         {currentView === 'stats' && (
-          <div className="flex-1 p-4 md:p-8 bg-secondary/10 flex flex-col justify-center">
-            <div className="max-w-2xl mx-auto w-full space-y-6">
+          <div className="flex-1 p-4 md:p-8 flex flex-col justify-center">
+            <div className="max-w-3xl mx-auto w-full space-y-8">
               <div className="text-center">
-                <h2 
-                  className="text-3xl md:text-4xl font-bold text-primary mb-2"
-                  style={{ fontFamily: 'Bungee, sans-serif' }}
+                <motion.h2 
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-4xl md:text-6xl font-bold text-primary mb-3 tracking-tight"
+                  style={{ fontFamily: 'Playfair Display, serif' }}
                 >
                   Estadísticas
-                </h2>
-                <p className="text-muted-foreground text-base">
+                </motion.h2>
+                <motion.p 
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 }}
+                  className="text-muted-foreground text-lg font-medium tracking-wide"
+                >
                   Resumen y comparativa de períodos
-                </p>
+                </motion.p>
               </div>
 
-              <div className="flex justify-center">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                className="flex justify-center"
+              >
                 <PeriodComparison
                   shifts={shifts || {}}
                   currentDate={currentDate}
                 />
-              </div>
+              </motion.div>
 
-              <ShiftSummary
-                shifts={shifts || {}}
-                currentDate={currentDate}
-                onExportPDF={handleExportPDF}
-              />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+              >
+                <ShiftSummary
+                  shifts={shifts || {}}
+                  currentDate={currentDate}
+                  onExportPDF={handleExportPDF}
+                />
+              </motion.div>
 
-              <div className="flex justify-center mt-8">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+                className="flex justify-center mt-10"
+              >
                 <Button
                   onClick={(e) => {
                     e.stopPropagation()
                     setCurrentView('calendar')
                   }}
                   size="lg"
-                  variant="secondary"
-                  className="gap-2"
+                  variant="outline"
+                  className="gap-2 text-base px-8 py-6 border-2 hover:bg-secondary/20 shadow-md hover:shadow-lg transition-all duration-300"
                 >
-                  <CalendarBlank size={20} weight="duotone" />
+                  <CalendarBlank size={24} weight="duotone" />
                   Volver al Calendario
                 </Button>
-              </div>
+              </motion.div>
             </div>
           </div>
         )}

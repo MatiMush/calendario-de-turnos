@@ -83,24 +83,33 @@ export function ShiftDialog({
     <AnimatePresence>
       {open && selectedDate && (
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.2 }}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
           onClick={(e) => e.stopPropagation()}
         >
-          <Card className="w-full max-w-4xl mx-auto shadow-xl bg-card/95 backdrop-blur-sm border-2 border-border mt-6">
-            <div className="p-4 md:p-6">
-              <div className="mb-4">
-                <h3 className="text-xl md:text-2xl font-semibold text-primary">
+          <Card className="w-full max-w-4xl mx-auto shadow-2xl bg-card/95 backdrop-blur-md border border-border/50 mt-8">
+            <div className="relative bg-gradient-to-br from-primary/15 via-secondary/10 to-accent/10 border-b border-border/50 p-5 md:p-6">
+              <div className="relative z-10">
+                <h3 className="text-2xl md:text-3xl font-bold text-primary tracking-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
                   Seleccionar Turno
                 </h3>
-                <p className="text-sm md:text-base text-muted-foreground capitalize mt-1">
+                <p className="text-sm md:text-base text-muted-foreground capitalize mt-1 font-medium">
                   {formatDate(selectedDate)}
                 </p>
               </div>
+              
+              <div 
+                className="absolute inset-0 opacity-10 pointer-events-none"
+                style={{
+                  backgroundImage: `radial-gradient(circle at 20% 50%, currentColor 0%, transparent 60%)`,
+                }}
+              />
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+            <div className="p-5 md:p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                 {shiftOptions.map((option) => {
                   const Icon = option.icon
                   const isSelected = selectedType === option.type
@@ -108,22 +117,23 @@ export function ShiftDialog({
                   return (
                     <motion.div
                       key={option.type}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      whileHover={{ scale: 1.03, y: -2 }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       <Button
                         onClick={() => setSelectedType(option.type)}
                         className={`
-                          w-full h-auto p-4 justify-start gap-3 md:flex-col md:items-center md:justify-center md:gap-2
+                          w-full h-auto p-5 justify-start gap-4 md:flex-col md:items-center md:justify-center md:gap-3
                           ${option.color}
-                          ${isSelected ? 'ring-2 ring-accent ring-offset-2' : ''}
+                          ${isSelected ? 'ring-4 ring-accent ring-offset-2 shadow-xl' : 'shadow-md'}
+                          transition-all duration-300
                         `}
                         variant="secondary"
                       >
-                        <Icon weight="fill" className="w-6 h-6 flex-shrink-0" />
-                        <div className="flex flex-col items-start md:items-center gap-0.5">
-                          <span className="font-semibold text-sm md:text-base">{option.label}</span>
-                          <span className="text-xs md:text-sm opacity-90">{option.time}</span>
+                        <Icon weight="fill" className="w-7 h-7 md:w-8 md:h-8 flex-shrink-0" />
+                        <div className="flex flex-col items-start md:items-center gap-1">
+                          <span className="font-bold text-base md:text-lg">{option.label}</span>
+                          <span className="text-xs md:text-sm opacity-90 font-medium">{option.time}</span>
                         </div>
                       </Button>
                     </motion.div>
@@ -131,10 +141,10 @@ export function ShiftDialog({
                 })}
               </div>
 
-              <div className="space-y-3 pt-3 border-t">
-                <div className="flex items-center gap-2 text-primary">
-                  <NotePencil className="w-5 h-5" />
-                  <Label htmlFor="shift-note" className="text-base font-semibold">
+              <div className="space-y-4 pt-4 border-t border-border/50">
+                <div className="flex items-center gap-3 text-primary">
+                  <NotePencil className="w-6 h-6" weight="bold" />
+                  <Label htmlFor="shift-note" className="text-lg font-bold">
                     Nota o Comentario (opcional)
                   </Label>
                 </div>
@@ -143,15 +153,15 @@ export function ShiftDialog({
                   placeholder="Agrega una nota sobre este turno..."
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
-                  className="min-h-[80px] resize-none"
+                  className="min-h-[100px] resize-none text-base border-2 focus:border-primary/50 rounded-xl"
                   maxLength={200}
                 />
-                <p className="text-xs text-muted-foreground text-right">
+                <p className="text-sm text-muted-foreground text-right font-medium">
                   {note.length}/200 caracteres
                 </p>
               </div>
 
-              <div className="flex flex-col md:flex-row gap-2 mt-4 pt-4 border-t">
+              <div className="flex flex-col md:flex-row gap-3 mt-6 pt-5 border-t border-border/50">
                 <motion.div
                   className="flex-1"
                   whileHover={selectedType ? { scale: 1.02 } : {}}
@@ -160,25 +170,25 @@ export function ShiftDialog({
                   <Button
                     onClick={handleSaveShift}
                     disabled={!selectedType}
-                    className="w-full relative overflow-hidden bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 shadow-lg hover:shadow-xl hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full relative overflow-hidden h-14 text-lg font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-[length:200%_100%] hover:bg-[position:100%_0] transition-all duration-500 shadow-lg hover:shadow-2xl hover:shadow-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
                     size="lg"
                   >
-                    <span className="relative z-10 flex items-center justify-center gap-2 font-semibold text-base">
+                    <span className="relative z-10 flex items-center justify-center gap-3">
                       {selectedType ? (
                         <>
-                          <Check weight="bold" className="w-5 h-5" />
+                          <Check weight="bold" className="w-6 h-6" />
                           Guardar Turno
                         </>
                       ) : (
                         <>
-                          <FloppyDisk weight="fill" className="w-5 h-5" />
+                          <FloppyDisk weight="fill" className="w-6 h-6" />
                           Selecciona un turno
                         </>
                       )}
                     </span>
                     {selectedType && (
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent"
                         initial={{ x: '-100%' }}
                         animate={{ x: '100%' }}
                         transition={{
@@ -202,10 +212,10 @@ export function ShiftDialog({
                         onOpenChange(false)
                       }}
                       variant="destructive"
-                      className="gap-2 shadow-md hover:shadow-lg hover:shadow-destructive/30 transition-all duration-300"
+                      className="gap-3 h-14 px-6 shadow-lg hover:shadow-2xl hover:shadow-destructive/40 transition-all duration-300 font-bold text-base"
                       size="lg"
                     >
-                      <Trash className="w-4 h-4" />
+                      <Trash className="w-5 h-5" weight="bold" />
                       Eliminar
                     </Button>
                   </motion.div>

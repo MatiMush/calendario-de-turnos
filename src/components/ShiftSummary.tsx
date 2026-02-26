@@ -102,56 +102,68 @@ export function ShiftSummary({ shifts, currentDate, onExportPDF }: ShiftSummaryP
   ]
 
   return (
-    <Card className="w-full shadow-xl overflow-hidden bg-card/80 backdrop-blur-sm border-2 border-border">
-      <div className="bg-primary/10 border-b-2 border-border p-4 md:p-5">
-        <div className="flex items-center justify-between flex-wrap gap-3">
+    <Card className="w-full shadow-2xl overflow-hidden bg-card/95 backdrop-blur-md border border-border/50">
+      <div className="relative bg-gradient-to-br from-primary/15 via-secondary/10 to-accent/10 border-b border-border/50 p-5 md:p-6">
+        <div className="flex items-center justify-between flex-wrap gap-4 relative z-10">
           <div>
-            <h3 className="text-lg md:text-xl font-bold text-primary" style={{ fontFamily: 'Bungee, sans-serif' }}>
+            <h3 className="text-xl md:text-2xl font-bold text-primary tracking-tight" style={{ fontFamily: 'Playfair Display, serif' }}>
               Resumen del Período
             </h3>
-            <p className="text-xs md:text-sm text-muted-foreground mt-1">
+            <p className="text-sm md:text-base text-muted-foreground mt-1 font-medium">
               Del 20 de {stats.startMonth} al 20 de {stats.endMonth}
             </p>
           </div>
           
-          <Button
-            onClick={onExportPDF}
-            size="sm"
-            className="gap-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground shadow-md"
-          >
-            <FilePdf weight="fill" className="w-4 h-4" />
-            <span className="hidden sm:inline">Exportar PDF</span>
-            <span className="sm:hidden">PDF</span>
-          </Button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              onClick={onExportPDF}
+              size="sm"
+              className="gap-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <FilePdf weight="fill" className="w-5 h-5" />
+              <span className="hidden sm:inline font-semibold">Exportar PDF</span>
+              <span className="sm:hidden font-semibold">PDF</span>
+            </Button>
+          </motion.div>
         </div>
+        
+        <div 
+          className="absolute inset-0 opacity-10 pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(circle at 70% 50%, currentColor 0%, transparent 60%)`,
+          }}
+        />
       </div>
 
-      <div className="p-4 md:p-5 space-y-4">
-        <div className="grid grid-cols-1 gap-3">
-          {shiftItems.map((item) => {
+      <div className="p-5 md:p-6 space-y-4">
+        <div className="grid grid-cols-1 gap-4">
+          {shiftItems.map((item, index) => {
             const Icon = item.icon
             return (
               <motion.div
                 key={item.type}
-                whileHover={{ scale: 1.02 }}
-                className={`${item.bgColor} rounded-lg p-3 border-2 border-border`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.02, x: 4 }}
+                className={`${item.bgColor} rounded-xl p-4 border border-border/50 shadow-md hover:shadow-lg transition-all duration-300`}
               >
-                <div className="flex items-center gap-3">
-                  <div className={`${item.color} p-2 rounded-lg bg-background/50`}>
-                    <Icon weight="fill" className="w-6 h-6" />
+                <div className="flex items-center gap-4">
+                  <div className={`${item.color} p-3 rounded-xl bg-background/60 shadow-md`}>
+                    <Icon weight="fill" className="w-7 h-7" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-baseline justify-between">
-                      <p className="text-xl md:text-2xl font-bold text-foreground">
+                      <p className="text-2xl md:text-3xl font-bold text-foreground">
                         {item.count}
                       </p>
                       {item.hours > 0 && (
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-sm font-semibold text-muted-foreground">
                           {item.hours}h
                         </p>
                       )}
                     </div>
-                    <p className="text-xs md:text-sm text-muted-foreground font-medium">
+                    <p className="text-sm md:text-base text-muted-foreground font-semibold mt-0.5">
                       {item.label}
                     </p>
                   </div>
@@ -162,46 +174,56 @@ export function ShiftSummary({ shifts, currentDate, onExportPDF }: ShiftSummaryP
         </div>
 
         <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
           whileHover={{ scale: 1.02 }}
-          className="p-4 bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg border-2 border-primary/30"
+          className="p-5 bg-gradient-to-br from-primary/20 via-secondary/15 to-accent/10 rounded-xl border border-primary/30 shadow-lg hover:shadow-xl transition-all duration-300"
         >
-          <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/20">
-              <Clock weight="fill" className="w-7 h-7 text-primary" />
+          <div className="flex items-center gap-4">
+            <div className="p-3 rounded-xl bg-primary/25 shadow-md">
+              <Clock weight="fill" className="w-8 h-8 text-primary" />
             </div>
             <div className="flex-1">
-              <p className="text-3xl font-bold text-foreground">
+              <p className="text-4xl md:text-5xl font-bold text-foreground">
                 {stats.totalHours}h
               </p>
-              <p className="text-sm text-muted-foreground font-medium">
+              <p className="text-base md:text-lg text-muted-foreground font-semibold mt-0.5">
                 Total de Horas Trabajadas
               </p>
             </div>
           </div>
         </motion.div>
 
-        <div className="p-3 bg-accent/10 rounded-lg border border-accent/30">
-          <div className="flex items-center gap-2 mb-2">
-            <Clock weight="bold" className="w-4 h-4 text-accent-foreground" />
-            <p className="text-sm font-semibold text-accent-foreground">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="p-4 bg-accent/15 rounded-xl border border-accent/30 shadow-md"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <Clock weight="bold" className="w-5 h-5 text-accent-foreground" />
+            <p className="text-base font-bold text-accent-foreground">
               Desglose de Horas
             </p>
           </div>
-          <div className="space-y-2 text-xs">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Turnos Mañana:</span>
-              <span className="font-semibold text-foreground">{stats.morningHours}h</span>
+          <div className="space-y-3 text-sm">
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground font-medium">Turnos Mañana:</span>
+              <span className="font-bold text-foreground text-base">{stats.morningHours}h</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Turnos Noche:</span>
-              <span className="font-semibold text-foreground">{stats.nightHours}h</span>
+            <div className="h-px bg-border/50" />
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground font-medium">Turnos Noche:</span>
+              <span className="font-bold text-foreground text-base">{stats.nightHours}h</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Horas Nocturnas:</span>
-              <span className="font-semibold text-foreground">{stats.nightHoursNocturnal}h</span>
+            <div className="h-px bg-border/50" />
+            <div className="flex justify-between items-center">
+              <span className="text-muted-foreground font-medium">Horas Nocturnas:</span>
+              <span className="font-bold text-foreground text-base">{stats.nightHoursNocturnal}h</span>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </Card>
   )

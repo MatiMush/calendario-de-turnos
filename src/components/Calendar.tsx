@@ -67,77 +67,99 @@ export function Calendar({ currentDate, shifts, selectedDate, onDateSelect, onPr
     calendarDays.push(
       <motion.button
         key={day}
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: 1.08, y: -2 }}
         whileTap={{ scale: 0.95 }}
         onClick={(e) => {
           e.stopPropagation()
           onDateSelect(dateStr)
         }}
         className={`
-          aspect-square rounded-lg relative flex flex-col items-center justify-center
-          transition-all duration-200 border-2
+          aspect-square rounded-xl relative flex flex-col items-center justify-center
+          transition-all duration-300 border-2 font-semibold
           ${shift 
-            ? `${getShiftColor(shift.type)} border-transparent shadow-md` 
-            : 'bg-card hover:bg-secondary border-border hover:border-primary/30'
+            ? `${getShiftColor(shift.type)} border-transparent shadow-lg hover:shadow-xl` 
+            : 'bg-card hover:bg-gradient-to-br hover:from-secondary/20 hover:to-accent/10 border-border hover:border-primary/40'
           }
-          ${isToday ? 'ring-2 ring-accent ring-offset-2 ring-offset-background' : ''}
-          ${isSelected && !isToday ? 'ring-2 ring-primary ring-offset-2 ring-offset-background' : ''}
+          ${isToday ? 'ring-4 ring-accent ring-offset-2 ring-offset-background' : ''}
+          ${isSelected && !isToday ? 'ring-4 ring-primary ring-offset-2 ring-offset-background' : ''}
         `}
       >
-        <span className={`text-sm font-medium ${shift ? 'mb-1' : ''}`}>{day}</span>
+        <span className={`text-base md:text-lg font-bold ${shift ? 'mb-1' : ''}`}>{day}</span>
         {shift && (
-          <div className="flex items-center justify-center gap-1">
+          <motion.div 
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="flex items-center justify-center gap-1"
+          >
             {getShiftIcon(shift.type)}
-          </div>
+          </motion.div>
         )}
         {shift?.note && (
-          <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+          <motion.div 
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="absolute top-2 right-2 w-2 h-2 rounded-full bg-accent shadow-lg"
+          />
         )}
       </motion.button>
     )
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto shadow-xl overflow-hidden bg-card/80 backdrop-blur-sm border-2 border-border">
-      <div className="bg-primary/10 border-b-2 border-border p-4 md:p-6">
-        <div className="flex items-center justify-between">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onPreviousMonth}
-            className="hover:bg-primary/20 rounded-full"
-          >
-            <CaretLeft className="w-6 h-6" />
-          </Button>
+    <Card className="w-full max-w-4xl mx-auto shadow-2xl overflow-hidden bg-card/95 backdrop-blur-md border border-border/50">
+      <div className="relative bg-gradient-to-br from-primary/15 via-secondary/10 to-accent/10 border-b border-border/50 p-5 md:p-7">
+        <div className="flex items-center justify-between relative z-10">
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onPreviousMonth}
+              className="hover:bg-primary/25 rounded-full transition-all duration-300 h-12 w-12"
+            >
+              <CaretLeft className="w-7 h-7" weight="bold" />
+            </Button>
+          </motion.div>
           
-          <h1 className="text-2xl md:text-3xl font-bold text-primary" style={{ fontFamily: 'Bungee, sans-serif' }}>
+          <h1 
+            className="text-3xl md:text-4xl font-bold text-primary tracking-tight"
+            style={{ fontFamily: 'Playfair Display, serif' }}
+          >
             {MONTHS[month]} {year}
           </h1>
           
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onNextMonth}
-            className="hover:bg-primary/20 rounded-full"
-          >
-            <CaretRight className="w-6 h-6" />
-          </Button>
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onNextMonth}
+              className="hover:bg-primary/25 rounded-full transition-all duration-300 h-12 w-12"
+            >
+              <CaretRight className="w-7 h-7" weight="bold" />
+            </Button>
+          </motion.div>
         </div>
+        
+        <div 
+          className="absolute inset-0 opacity-10 pointer-events-none"
+          style={{
+            backgroundImage: `radial-gradient(circle at 30% 50%, currentColor 0%, transparent 60%)`,
+          }}
+        />
       </div>
 
-      <div className="p-4 md:p-6">
-        <div className="grid grid-cols-7 gap-2 mb-3">
+      <div className="p-5 md:p-7">
+        <div className="grid grid-cols-7 gap-3 mb-4">
           {DAYS.map((day) => (
             <div
               key={day}
-              className="text-center text-xs md:text-sm font-semibold text-muted-foreground py-2"
+              className="text-center text-xs md:text-sm font-bold text-muted-foreground/80 py-2 uppercase tracking-wider"
             >
               {day}
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-7 gap-3">
           {calendarDays}
         </div>
       </div>
