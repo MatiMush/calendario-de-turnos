@@ -30,7 +30,7 @@ function App() {
     setSelectedDate(null)
   }
 
-  const handleSelectShift = (type: ShiftType, note?: string) => {
+  const handleSelectShift = (type: ShiftType, note?: string, customHours?: { hours: 8 | 12; startTime?: string; endTime?: string }) => {
     if (!selectedDate) return
 
     setShifts((currentShifts) => ({
@@ -39,6 +39,7 @@ function App() {
         date: selectedDate,
         type,
         note,
+        customHours,
       },
     }))
 

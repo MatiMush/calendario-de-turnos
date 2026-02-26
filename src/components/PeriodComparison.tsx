@@ -112,11 +112,14 @@ export function PeriodComparison({ shifts, currentDate }: PeriodComparisonProps)
       
       if (shift?.type === 'morning') {
         stats.morning++
-        stats.morningHours += HOURS_PER_SHIFT.morning
+        const hours = shift.customHours?.hours || HOURS_PER_SHIFT.morning
+        stats.morningHours += hours
       } else if (shift?.type === 'night') {
         stats.night++
-        stats.nightHours += HOURS_PER_SHIFT.night
-        stats.nightHoursNocturnal += HOURS_PER_SHIFT.nightHoursNocturnal
+        const hours = shift.customHours?.hours || HOURS_PER_SHIFT.night
+        stats.nightHours += hours
+        const nightHoursNocturnal = hours === 8 ? 6 : HOURS_PER_SHIFT.nightHoursNocturnal
+        stats.nightHoursNocturnal += nightHoursNocturnal
       } else if (shift?.type === 'rest') {
         stats.rest++
       }

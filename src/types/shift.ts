@@ -4,6 +4,11 @@ export interface Shift {
   date: string
   type: ShiftType
   note?: string
+  customHours?: {
+    hours: 8 | 12
+    startTime?: string
+    endTime?: string
+  }
 }
 
 export interface ShiftData {

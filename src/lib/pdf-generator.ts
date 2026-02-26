@@ -49,7 +49,7 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
       totalHours: 0,
     }
     
-    const shiftList: Array<{ date: string; shift: ShiftType; note?: string }> = []
+    const shiftList: Array<{ date: string; shift: ShiftType; note?: string; hours?: number; startTime?: string; endTime?: string }> = []
     
     const currentDateIter = new Date(startDate)
     
@@ -58,6 +58,8 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
       const shift = shifts[dateStr]
       
       if (shift) {
+        const hours = shift.customHours?.hours || (shift.type === 'morning' || shift.type === 'night' ? HOURS_PER_SHIFT.morning : 0)
+        
         shiftList.push({
           date: currentDateIter.toLocaleDateString('es-ES', {
             weekday: 'short',
@@ -66,14 +68,17 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
           }),
           shift: shift.type,
           note: shift.note,
+          hours: hours,
+          startTime: shift.customHours?.startTime,
+          endTime: shift.customHours?.endTime,
         })
         
         if (shift.type === 'morning') {
           stats.morning++
-          stats.morningHours += HOURS_PER_SHIFT.morning
+          stats.morningHours += hours
         } else if (shift.type === 'night') {
           stats.night++
-          stats.nightHours += HOURS_PER_SHIFT.night
+          stats.nightHours += hours
         } else if (shift.type === 'rest') {
           stats.rest++
         }
@@ -152,7 +157,15 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
         pdf.setTextColor(100, 180, 100)
       }
       
-      pdf.text(shiftLabel, 70, yPos)
+      let shiftText = shiftLabel
+      if (item.hours && item.hours !== 12 && item.shift !== 'rest') {
+        shiftText += ` (${item.hours}h)`
+        if (item.startTime && item.endTime) {
+          shiftText += ` ${item.startTime}-${item.endTime}`
+        }
+      }
+      
+      pdf.text(shiftText, 70, yPos)
       
       if (item.note) {
         pdf.setTextColor(100, 100, 100)

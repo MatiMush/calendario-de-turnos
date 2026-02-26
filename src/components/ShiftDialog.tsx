@@ -3,7 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Sun, Moon, Leaf, Trash, NotePencil, FloppyDisk, Check } from '@phosphor-icons/react'
+import { Input } from '@/components/ui/input'
+import { Sun, Moon, Leaf, Trash, NotePencil, FloppyDisk, Check, Clock } from '@phosphor-icons/react'
 import { ShiftType, Shift } from '@/types/shift'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -12,7 +13,7 @@ interface ShiftDialogProps {
   onOpenChange: (open: boolean) => void
   selectedDate: string | null
   currentShift: Shift | null
-  onSelectShift: (type: ShiftType, note?: string) => void
+  onSelectShift: (type: ShiftType, note?: string, customHours?: { hours: 8 | 12; startTime?: string; endTime?: string }) => void
   onDeleteShift: () => void
 }
 
@@ -26,14 +27,23 @@ export function ShiftDialog({
 }: ShiftDialogProps) {
   const [note, setNote] = useState('')
   const [selectedType, setSelectedType] = useState<ShiftType | null>(null)
+  const [hours, setHours] = useState<8 | 12>(12)
+  const [startTime, setStartTime] = useState('')
+  const [endTime, setEndTime] = useState('')
 
   useEffect(() => {
     if (currentShift) {
       setNote(currentShift.note || '')
       setSelectedType(currentShift.type)
+      setHours(currentShift.customHours?.hours || 12)
+      setStartTime(currentShift.customHours?.startTime || '')
+      setEndTime(currentShift.customHours?.endTime || '')
     } else {
       setNote('')
       setSelectedType(null)
+      setHours(12)
+      setStartTime('')
+      setEndTime('')
     }
   }, [currentShift, open])
 
@@ -50,7 +60,13 @@ export function ShiftDialog({
 
   const handleSaveShift = () => {
     if (selectedType) {
-      onSelectShift(selectedType, note.trim() || undefined)
+      const customHours = (selectedType !== 'rest' && hours === 8) ? {
+        hours,
+        startTime: startTime || undefined,
+        endTime: endTime || undefined,
+      } : undefined
+
+      onSelectShift(selectedType, note.trim() || undefined, customHours)
       onOpenChange(false)
     }
   }
@@ -140,6 +156,99 @@ export function ShiftDialog({
                   )
                 })}
               </div>
+
+              {selectedType && selectedType !== 'rest' && (
+                <div className="space-y-4 pt-4 border-t border-border/50">
+                  <div className="flex items-center gap-3 text-primary">
+                    <Clock className="w-6 h-6" weight="bold" />
+                    <Label className="text-lg font-bold">
+                      Horas trabajadas
+                    </Label>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Button
+                        type="button"
+                        onClick={() => {
+                          setHours(12)
+                          setStartTime('')
+                          setEndTime('')
+                        }}
+                        variant={hours === 12 ? 'default' : 'outline'}
+                        className={`w-full h-14 text-base font-bold transition-all duration-300 ${
+                          hours === 12 
+                            ? 'ring-2 ring-primary ring-offset-2 shadow-lg' 
+                            : 'hover:border-primary/50'
+                        }`}
+                      >
+                        12 Horas
+                      </Button>
+                    </motion.div>
+                    
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <Button
+                        type="button"
+                        onClick={() => setHours(8)}
+                        variant={hours === 8 ? 'default' : 'outline'}
+                        className={`w-full h-14 text-base font-bold transition-all duration-300 ${
+                          hours === 8 
+                            ? 'ring-2 ring-primary ring-offset-2 shadow-lg' 
+                            : 'hover:border-primary/50'
+                        }`}
+                      >
+                        8 Horas
+                      </Button>
+                    </motion.div>
+                  </div>
+
+                  <AnimatePresence>
+                    {hours === 8 && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="space-y-4 pt-3"
+                      >
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="start-time" className="text-sm font-semibold text-muted-foreground">
+                              Hora de inicio
+                            </Label>
+                            <Input
+                              id="start-time"
+                              type="time"
+                              value={startTime}
+                              onChange={(e) => setStartTime(e.target.value)}
+                              className="h-12 text-base border-2 focus:border-primary/50"
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="end-time" className="text-sm font-semibold text-muted-foreground">
+                              Hora de fin
+                            </Label>
+                            <Input
+                              id="end-time"
+                              type="time"
+                              value={endTime}
+                              onChange={(e) => setEndTime(e.target.value)}
+                              className="h-12 text-base border-2 focus:border-primary/50"
+                            />
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
 
               <div className="space-y-4 pt-4 border-t border-border/50">
                 <div className="flex items-center gap-3 text-primary">

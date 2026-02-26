@@ -94,6 +94,15 @@ export function Calendar({ currentDate, shifts, selectedDate, onDateSelect, onPr
             {getShiftIcon(shift.type)}
           </motion.div>
         )}
+        {shift?.customHours?.hours === 8 && (
+          <motion.div 
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            className="absolute bottom-2 left-2 px-1.5 py-0.5 bg-accent text-accent-foreground rounded text-[10px] font-bold shadow-md"
+          >
+            8h
+          </motion.div>
+        )}
         {shift?.note && (
           <motion.div 
             animate={{ scale: [1, 1.2, 1] }}
