@@ -133,7 +133,7 @@ export function generateShiftPDF(shifts: ShiftData, currentDate: Date) {
     
     pdf.setFontSize(11)
     
-    shiftList.forEach((item, index) => {
+    shiftList.forEach((item) => {
       if (yPos > 270) {
         pdf.addPage()
         yPos = 20

@@ -48,7 +48,7 @@ export function PeriodComparison({ shifts, currentDate }: PeriodComparisonProps)
     const shiftDates = Object.keys(shifts).map(dateStr => new Date(dateStr))
     
     if (shiftDates.length === 0) {
-      const currentYear = new Date().getFullYear()
+      const currentYear = currentDate.getFullYear()
       for (let i = 0; i < 12; i++) {
         const month = i
         const id = `${currentYear}-${String(month).padStart(2, '0')}`
@@ -65,7 +65,7 @@ export function PeriodComparison({ shifts, currentDate }: PeriodComparisonProps)
     const minDate = new Date(Math.min(...shiftDates.map(d => d.getTime())))
     const maxDate = new Date(Math.max(...shiftDates.map(d => d.getTime())))
     
-    let currentPeriod = new Date(minDate.getFullYear(), minDate.getMonth(), 1)
+    const currentPeriod = new Date(minDate.getFullYear(), minDate.getMonth(), 1)
     const endPeriod = new Date(maxDate.getFullYear(), maxDate.getMonth() + 2, 1)
     
     while (currentPeriod <= endPeriod) {

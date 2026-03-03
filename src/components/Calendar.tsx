@@ -52,7 +52,7 @@ export function Calendar({ currentDate, shifts, selectedDate, onDateSelect, onPr
     }
   }
 
-  const calendarDays = []
+  const calendarDays: Array<import('react').ReactNode> = []
   
   for (let i = 0; i < firstDayOfMonth; i++) {
     calendarDays.push(<div key={`empty-${i}`} className="aspect-square" />)

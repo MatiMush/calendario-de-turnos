@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Sun, Moon, Leaf, FilePdf, Clock } from '@phosphor-icons/react'
-import { ShiftType, ShiftData } from '@/types/shift'
+import { ShiftData } from '@/types/shift'
 import { motion } from 'framer-motion'
 
 interface ShiftSummaryProps {
